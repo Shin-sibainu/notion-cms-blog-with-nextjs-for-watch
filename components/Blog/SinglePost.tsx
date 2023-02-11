@@ -10,10 +10,11 @@ type Props = {
 
 const SinglePost = (props: Props) => {
   const { slug, title, date, description } = props;
+  console.log({ slug, title, date, description });
 
   return (
     <Link href={`posts/${slug}`}>
-      <section className="mb-12 lg:w-1/2 mx-auto bg-sky-900 rounded-md p-5">
+      <section className="mb-8 lg:w-1/2 mx-auto bg-sky-900 rounded-md p-5">
         <div className="flex items-center">
           <h2 className="text-gray-100 font-medium text-2xl mb-2 mr-2">
             {title}

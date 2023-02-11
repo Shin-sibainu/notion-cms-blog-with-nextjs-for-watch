@@ -36,7 +36,7 @@ export default function Home({ posts }) {
       </Head>
 
       <main className="contianer w-full mt-16">
-        <h1 className="text-5xl text-dark-100 mb-20 text-center font-medium">
+        <h1 className="text-5xl text-dark-100 mb-16 text-center font-medium">
           Notion Blog
         </h1>
         {posts.map((post, index) => (
