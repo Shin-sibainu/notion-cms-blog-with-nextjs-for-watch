@@ -10,6 +10,7 @@ const n2m = new NotionToMarkdown({ notionClient: notion });
 export const getAllPublished = async () => {
   const posts = await notion.databases.query({
     database_id: process.env.DATABASE_ID,
+    page_size: 4,
     filter: {
       property: "Published",
       checkbox: {
@@ -107,11 +108,13 @@ export const getSinglePost = async (slug) => {
 };
 
 /* getPagination */
-export const getPagination = async () => {
-  const response = await notion.databases.query({
-    database_id: process.env.DATABASE_ID,
-    page_size: 100,
-  });
+// export const getPagination = async () => {
+//   const response = await notion.databases.query({
+//     database_id: process.env.DATABASE_ID,
+//     page_size: 4,
+//   });
 
-  return response.results;
-};
+//   console.log(response.results);
+
+//   return response.results;
+// };

@@ -8,6 +8,7 @@ import Link from "next/link";
 export const getStaticPaths = async () => {
   const posts = await getAllPublished();
   const paths = posts.map(({ slug }) => ({ params: { slug } }));
+  console.log(paths);
 
   return {
     paths,

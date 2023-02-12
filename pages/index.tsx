@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SinglePost from "../components/Blog/SinglePost";
 import Pagination from "../components/Pagination/Pagination";
-import { getAllPublished, getPagination } from "../lib/notion";
+import { getAllPublished } from "../lib/notion";
 import styles from "../styles/Home.module.css";
 
 //nextjs + typescript
@@ -17,22 +17,18 @@ import styles from "../styles/Home.module.css";
 //https://zenn.dev/nbr41to/articles/474df7540c475c
 
 export const getStaticProps = async () => {
-  const data = await getAllPublished();
-  //page full list
-  const blogList = await getPagination();
+  const data = await getAllPublished(); //ブログ総数の取得のため
 
   return {
     props: {
       posts: data,
-      blogList: blogList,
     },
     revalidate: 60, //60s毎にISR発動
   };
 };
 
-export default function Home({ posts, blogList }) {
+export default function Home({ posts }) {
   if (!posts) return <h1>No posts</h1>;
-  console.log(blogList.length); //blog投稿数
 
   return (
     <div className="container h-full w-full mx-auto font-Zen">
@@ -46,19 +42,26 @@ export default function Home({ posts, blogList }) {
         <h1 className="text-5xl text-dark-100 mb-16 text-center font-medium">
           Notion Blog
         </h1>
+        {/* 4つだけ表示させたい */}
         {posts.map((post, index) => (
-          <div className="mx-4 block">
+          <div className="mx-4 block" key={index}>
             <SinglePost
-              key={index}
               slug={post.slug}
               title={post.title}
               date={post.date}
               description={post.description}
+              isPageList={false}
             />
           </div>
         ))}
+        <Link
+          href="/posts/page/1"
+          className="lg:w-1/2 mx-auto rounded-md px-5 block text-right"
+        >
+          ...もっと見る
+        </Link>
       </main>
-      <Pagination />
+      {/* <Pagination totalCount={posts.length} /> */}
     </div>
   );
 }
