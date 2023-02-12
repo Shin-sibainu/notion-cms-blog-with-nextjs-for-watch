@@ -2,7 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import SinglePost from "../components/Blog/SinglePost";
-import { getAllPublished } from "../lib/notion";
+import Pagination from "../components/Pagination/Pagination";
+import { getAllPublished, getPagination } from "../lib/notion";
 import styles from "../styles/Home.module.css";
 
 //nextjs + typescript
@@ -12,20 +13,26 @@ import styles from "../styles/Home.module.css";
 //https://bejamas.io/blog/how-to-create-next-js-blog-using-notion-as-a-cms/
 
 // https://www.craftz.dog/
+// https://www.nbr41.com/posts
+//https://zenn.dev/nbr41to/articles/474df7540c475c
 
 export const getStaticProps = async () => {
   const data = await getAllPublished();
+  //page full list
+  const blogList = await getPagination();
 
   return {
     props: {
       posts: data,
+      blogList: blogList,
     },
     revalidate: 60, //60s毎にISR発動
   };
 };
 
-export default function Home({ posts }) {
+export default function Home({ posts, blogList }) {
   if (!posts) return <h1>No posts</h1>;
+  console.log(blogList.length); //blog投稿数
 
   return (
     <div className="container h-full w-full mx-auto font-Zen">
@@ -51,6 +58,7 @@ export default function Home({ posts }) {
           </div>
         ))}
       </main>
+      <Pagination />
     </div>
   );
 }

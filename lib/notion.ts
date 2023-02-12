@@ -81,7 +81,7 @@ const getToday = (datestring: string) => {
   return today; //今日の日付を返す
 };
 
-//singlePost
+/* singlePost */
 export const getSinglePost = async (slug) => {
   const response = await notion.databases.query({
     database_id: process.env.DATABASE_ID,
@@ -104,4 +104,14 @@ export const getSinglePost = async (slug) => {
     metadata,
     markdown: mdString,
   };
+};
+
+/* getPagination */
+export const getPagination = async () => {
+  const response = await notion.databases.query({
+    database_id: process.env.DATABASE_ID,
+    page_size: 100,
+  });
+
+  return response.results;
 };

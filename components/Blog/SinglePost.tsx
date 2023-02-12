@@ -10,7 +10,7 @@ type Props = {
 
 const SinglePost = (props: Props) => {
   const { slug, title, date, description } = props;
-  console.log({ slug, title, date, description });
+  // console.log({ slug, title, date, description });
 
   return (
     <Link href={`posts/${slug}`}>
