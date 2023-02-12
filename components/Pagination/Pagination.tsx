@@ -16,10 +16,15 @@ const Pagination = (props: Props) => {
 
   return (
     <section className="mb-8 lg:w-1/2 mx-auto rounded-md p-5">
-      <ul>
+      <ul className="flex items-center justify-center gap-4">
         {range(1, Math.ceil(totalCount / PER_PAGE)).map((number, index) => (
-          <li key={index}>
-            <Link href={`/posts/page/${number}`}>{number}</Link>
+          <li key={index} className="bg-sky-900 rounded-full w-6 h-6 relative">
+            <Link
+              href={`/posts/page/${number}`}
+              className="text-xs absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-100"
+            >
+              {number}
+            </Link>
           </li>
         ))}
       </ul>

@@ -16,8 +16,8 @@ const SinglePost = (props: Props) => {
   return (
     <Link href={`/posts/${slug}`}>
       {isPageList ? (
-        <section className="mb-8 lg:w-1/2 mx-auto bg-sky-900 rounded-md p-5 shadow-2xl hover:shadow-none hover:translate-y-1 transition-all duration-300">
-          <div className="flex items-center">
+        <section className="mb-8 mx-auto bg-sky-900 rounded-md p-5 shadow-2xl hover:shadow-none hover:translate-y-1 transition-all duration-300">
+          <div className="lg:flex items-center">
             <h2 className="text-gray-100 font-medium text-2xl mb-2 mr-2">
               {title}
             </h2>

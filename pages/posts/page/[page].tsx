@@ -40,19 +40,20 @@ const BlogPageList = ({ posts }) => {
         <h1 className="text-5xl text-dark-100 mb-16 text-center font-medium">
           Notion Blog
         </h1>
-        {/* grid表示 */}
         {/* page番号に応じて内容を変える */}
-        {posts.map((post, index) => (
-          <div className="mx-4 block" key={index}>
-            <SinglePost
-              slug={post.slug}
-              title={post.title}
-              date={post.date}
-              description={post.description}
-              isPageList={true}
-            />
-          </div>
-        ))}
+        <section className="sm:grid grid-cols-2 gap-3 w-5/6 mx-auto">
+          {posts.map((post, index) => (
+            <div className="block" key={index}>
+              <SinglePost
+                slug={post.slug}
+                title={post.title}
+                date={post.date}
+                description={post.description}
+                isPageList={true}
+              />
+            </div>
+          ))}
+        </section>
         <Pagination totalCount={10} />
       </main>
       {/* <Pagination totalCount={posts.length} /> */}
