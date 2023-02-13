@@ -2,10 +2,10 @@ import Head from "next/head";
 import React from "react";
 import SinglePost from "../../../components/Blog/SinglePost";
 import Pagination from "../../../components/Pagination/Pagination";
-import { getAllPublished } from "../../../lib/notion";
+import { getAllPosts } from "../../../lib/notion";
 
 export const getStaticPaths = async () => {
-  const posts = await getAllPublished();
+  const posts = await getAllPosts();
   //   const paths = posts.map(({ slug }) => ({ params: { slug } }));
   //   console.log(paths);
 
@@ -17,7 +17,7 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async () => {
-  const data = await getAllPublished(); //ブログ総数の取得のため
+  const data = await getAllPosts();
 
   return {
     props: {
@@ -38,7 +38,7 @@ const BlogPageList = ({ posts }) => {
 
       <main className="contianer w-full mt-16">
         <h1 className="text-5xl text-dark-100 mb-16 text-center font-medium">
-          Notion Blog
+          Notion Blog🚀
         </h1>
         {/* page番号に応じて内容を変える */}
         <section className="sm:grid grid-cols-2 gap-3 w-5/6 mx-auto">
@@ -54,7 +54,7 @@ const BlogPageList = ({ posts }) => {
             </div>
           ))}
         </section>
-        <Pagination totalCount={10} />
+        <Pagination currentPage={1} numberOfPage={2} tag="" />
       </main>
       {/* <Pagination totalCount={posts.length} /> */}
     </div>

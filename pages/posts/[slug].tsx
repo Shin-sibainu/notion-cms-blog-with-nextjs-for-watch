@@ -1,12 +1,12 @@
 import React from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { getAllPublished, getSinglePost } from "../../lib/notion";
+import { getAllPosts, getSinglePost } from "../../lib/notion";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Link from "next/link";
 
 export const getStaticPaths = async () => {
-  const posts = await getAllPublished();
+  const posts = await getAllPosts();
   const paths = posts.map(({ slug }) => ({ params: { slug } }));
   console.log(paths);
 

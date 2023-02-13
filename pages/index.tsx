@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SinglePost from "../components/Blog/SinglePost";
 import Pagination from "../components/Pagination/Pagination";
-import { getAllPublished } from "../lib/notion";
+import { getAllPosts, getPosts } from "../lib/notion";
 import styles from "../styles/Home.module.css";
 
 //nextjs + typescript
@@ -11,13 +11,14 @@ import styles from "../styles/Home.module.css";
 
 //notion custom
 //https://bejamas.io/blog/how-to-create-next-js-blog-using-notion-as-a-cms/
+//https://github.com/otoyo/astro-notion-blog/blob/main/src/lib/notion/client.ts
 
 // https://www.craftz.dog/
 // https://www.nbr41.com/posts
 //https://zenn.dev/nbr41to/articles/474df7540c475c
 
 export const getStaticProps = async () => {
-  const data = await getAllPublished(); //ブログ総数の取得のため
+  const data = await getPosts();
 
   return {
     props: {
@@ -40,7 +41,7 @@ export default function Home({ posts }) {
 
       <main className="contianer w-full mt-16">
         <h1 className="text-5xl text-dark-100 mb-16 text-center font-medium">
-          Notion Blog
+          Notion Blog🚀
         </h1>
         {/* 4つだけ表示させたい */}
         {posts.map((post, index) => (
@@ -61,7 +62,6 @@ export default function Home({ posts }) {
           ...もっと見る
         </Link>
       </main>
-      {/* <Pagination totalCount={posts.length} /> */}
     </div>
   );
 }
