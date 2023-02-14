@@ -15,7 +15,9 @@ import styles from "../styles/Home.module.css";
 
 // https://www.craftz.dog/
 // https://www.nbr41.com/posts
-//https://zenn.dev/nbr41to/articles/474df7540c475c
+// https://zenn.dev/nbr41to/articles/474df7540c475c
+
+// https://alpacat.com/
 
 export const getStaticProps = async () => {
   const data = await getPosts();

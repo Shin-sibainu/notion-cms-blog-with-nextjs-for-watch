@@ -1,8 +1,13 @@
 import Head from "next/head";
+import Link from "next/link";
 import React from "react";
 import SinglePost from "../../../components/Blog/SinglePost";
 import Pagination from "../../../components/Pagination/Pagination";
-import { getAllPosts } from "../../../lib/notion";
+import {
+  getAllPosts,
+  getNumberOfPages,
+  getPostsByPage,
+} from "../../../lib/notion";
 
 export const getStaticPaths = async () => {
   const posts = await getAllPosts();
@@ -16,18 +21,23 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async () => {
-  const data = await getAllPosts();
+export const getStaticProps = async (context) => {
+  //何ページ目の記事を持ってくるのか
+  const currentPage = context.params?.page;
+  const data = await getPostsByPage(parseInt(currentPage.toString(), 10)); //page ... 今見てるページ番号
+  const numberOfPages = await getNumberOfPages();
 
   return {
     props: {
       posts: data,
+      currentPage: currentPage,
+      numberOfPages: numberOfPages,
     },
     revalidate: 60, //60s毎にISR発動
   };
 };
 
-const BlogPageList = ({ posts }) => {
+const BlogPageList = ({ posts, currentPage, numberOfPages }) => {
   return (
     <div className="container h-full w-full mx-auto font-Zen">
       <Head>
@@ -54,9 +64,12 @@ const BlogPageList = ({ posts }) => {
             </div>
           ))}
         </section>
-        <Pagination currentPage={1} numberOfPage={2} tag="" />
+        <Pagination
+          currentPage={parseInt(currentPage, 10)}
+          numberOfPage={numberOfPages}
+          tag=""
+        />
       </main>
-      {/* <Pagination totalCount={posts.length} /> */}
     </div>
   );
 };

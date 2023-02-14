@@ -36,16 +36,32 @@ const Pagination = (props: Props) => {
   return (
     <section className="mb-8 lg:w-1/2 mx-auto rounded-md p-5">
       <ul className="flex items-center justify-center gap-4">
+        <Link
+          href={getPageLink(1, tag)}
+          className={isFirstPage && "pointer-events-none"}
+        >
+          &lt;&lt;
+        </Link>
         {pages.map((page: number, index) => (
-          <li key={index} className="bg-sky-900 rounded-full w-6 h-6 relative">
+          <li key={index} className="bg-sky-900 rounded-lg w-6 h-8 relative">
             <Link
               href={getPageLink(page, tag)}
-              className="text-xs absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-100"
+              className={
+                page === currentPage
+                  ? `text-xs absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 pointer-events-none`
+                  : `text-xs absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-100`
+              }
             >
               {page}
             </Link>
           </li>
         ))}
+        <Link
+          href={getPageLink(numberOfPage, tag)}
+          className={isLastPage && "pointer-events-none"}
+        >
+          &gt;&gt;
+        </Link>
       </ul>
     </section>
   );

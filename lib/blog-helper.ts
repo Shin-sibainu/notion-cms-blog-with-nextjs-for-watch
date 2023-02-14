@@ -4,7 +4,7 @@ export const getTagLink = (tag: string) => {
 
 export const getPageLink = (page: number, tag: string) => {
   if (page === 1) {
-    return tag ? getTagLink(tag) : "/";
+    return tag ? getTagLink(tag) : "/posts/page/1";
   }
   return tag
     ? `posts/tag/${encodeURIComponent(tag)}/page/${page.toString()}`
