@@ -3,47 +3,45 @@ import Link from "next/link";
 import React from "react";
 import SinglePost from "../../../components/Blog/SinglePost";
 import Pagination from "../../../components/Pagination/Pagination";
-import Tag from "../../../components/Tag/Tag";
 import {
   getAllPosts,
+  getAllTags,
   getNumberOfPages,
   getPostsByPage,
+  getPostsByTag,
 } from "../../../lib/notion";
+import { NUMBER_OF_POSTS_PER_PAGE } from "../../../src/server_constants";
+
+//https://github.com/otoyo/astro-notion-blog/blob/main/src/pages/blog/tag/%5Btag%5D.astro
 
 export const getStaticPaths = async () => {
-  const numberOfPage = await getNumberOfPages();
-
-  let params = [];
-  for (let i = 1; i <= numberOfPage; i++) {
-    params.push({ params: { page: i.toString() } });
-  }
-
-  // console.log(params);
+  const allTags = await getAllTags();
+  const paths = allTags.map((tag) => ({ params: { tag: tag } }));
+  // console.log(paths);
 
   return {
-    // paths: [`/posts/page/1`], // /posts/page/1
-    paths: params,
+    paths,
     fallback: "blocking",
   };
 };
 
 export const getStaticProps = async (context) => {
   //何ページ目の記事を持ってくるのか
-  const currentPage = context.params?.page;
-  const data = await getPostsByPage(parseInt(currentPage.toString(), 10)); //page ... 今見てるページ番号
-  const numberOfPages = await getNumberOfPages();
+  const tag = context.params?.tag;
+  const tagPosts = await getPostsByTag(
+    tag.toString(),
+    NUMBER_OF_POSTS_PER_PAGE
+  );
 
   return {
     props: {
-      posts: data,
-      currentPage: currentPage,
-      numberOfPages: numberOfPages,
+      posts: tagPosts,
     },
     revalidate: 60, //60s毎にISR発動
   };
 };
 
-const BlogPageList = ({ posts, currentPage, numberOfPages }) => {
+const BlogTagList = ({ posts, currentPage, numberOfPages }) => {
   return (
     <div className="container h-full w-full mx-auto font-Zen">
       <Head>
@@ -58,6 +56,7 @@ const BlogPageList = ({ posts, currentPage, numberOfPages }) => {
         </h1>
         {/* page番号に応じて内容を変える */}
         <section className="sm:grid grid-cols-2 gap-3 w-5/6 mx-auto">
+          {/* /tag/○○の記事だけを取得 */}
           {posts.map((post, index) => (
             <div className="block" key={index}>
               <SinglePost
@@ -72,13 +71,13 @@ const BlogPageList = ({ posts, currentPage, numberOfPages }) => {
           ))}
         </section>
         <Pagination
-          currentPage={parseInt(currentPage, 10)}
+          currentPage={1}
           numberOfPage={numberOfPages}
-          tag=""
+          tag="blog" //ここを動的に変更
         />
       </main>
     </div>
   );
 };
 
-export default BlogPageList;
+export default BlogTagList;

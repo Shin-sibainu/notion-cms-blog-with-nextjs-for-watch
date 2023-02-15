@@ -109,13 +109,12 @@ export const getSinglePost = async (slug) => {
     markdown: mdString,
   };
 };
-
 /* home用記事取得(4つ) */
 export const getPosts = async (pageSize = 4) => {
   const allPosts = await getAllPosts();
   return allPosts.slice(0, pageSize);
 };
-
+//ページ番号に応じた記事取得
 export const getPostsByPage = async (page: number) => {
   if (page < 1) {
     return [];
@@ -129,7 +128,6 @@ export const getPostsByPage = async (page: number) => {
 
   return allPosts.slice(startIndex, endIndex);
 };
-
 //ページネーション箇所のページ数取得
 export const getNumberOfPages = async () => {
   const allPosts = await getAllPosts();
@@ -138,3 +136,25 @@ export const getNumberOfPages = async () => {
     (allPosts.length % NUMBER_OF_POSTS_PER_PAGE > 0 ? 1 : 0)
   );
 };
+//タグに応じた記事取得
+export const getPostsByTag = async (tagName: string, pageSize = 4) => {
+  if (!tagName) return [];
+
+  const allPosts = await getAllPosts();
+  // console.log(allPosts.map((post) => post.tags.map((tag) => tag)));
+  // console.log(allPosts.map((post) => post.tags[0]).filter((tag) => tag)[0]);
+  //全ての記事から同じタグだけを抽出する
+  return allPosts
+    .filter((post) => post.tags.find((tag) => tag === tagName))
+    .slice(0, pageSize);
+};
+
+export async function getAllTags() {
+  const allPosts = await getAllPosts();
+
+  const allTagsDuplicationLists = allPosts.flatMap((post) => post.tags);
+  const set = new Set(allTagsDuplicationLists);
+  const allTagsList = Array.from(set);
+
+  return allTagsList;
+}

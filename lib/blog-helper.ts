@@ -7,6 +7,7 @@ export const getPageLink = (page: number, tag: string) => {
     return tag ? getTagLink(tag) : "/posts/page/1";
   }
   return tag
-    ? `posts/tag/${encodeURIComponent(tag)}/page/${page.toString()}`
+    ? // ? `posts/tag/${encodeURIComponent(tag)}/page/${page.toString()}`
+      `/posts/tag/${encodeURIComponent(tag)}/page/${page}`
     : `/posts/page/${page.toString()}`;
 };

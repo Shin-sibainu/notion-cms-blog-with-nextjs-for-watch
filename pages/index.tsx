@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import SinglePost from "../components/Blog/SinglePost";
 import Pagination from "../components/Pagination/Pagination";
-import { getAllPosts, getPosts } from "../lib/notion";
+import Tag from "../components/Tag/Tag";
+import { getAllPosts, getAllTags, getPosts } from "../lib/notion";
 import styles from "../styles/Home.module.css";
 
 //nextjs + typescript
@@ -21,16 +22,18 @@ import styles from "../styles/Home.module.css";
 
 export const getStaticProps = async () => {
   const data = await getPosts();
+  const allTags = await getAllTags();
 
   return {
     props: {
       posts: data,
+      allTags,
     },
     revalidate: 60, //60s毎にISR発動
   };
 };
 
-export default function Home({ posts }) {
+export default function Home({ posts, allTags }) {
   if (!posts) return <h1>No posts</h1>;
 
   return (
@@ -53,16 +56,18 @@ export default function Home({ posts }) {
               title={post.title}
               date={post.date}
               description={post.description}
+              tag={post.tags}
               isPageList={false}
             />
           </div>
         ))}
         <Link
           href="/posts/page/1"
-          className="lg:w-1/2 mx-auto rounded-md px-5 block text-right"
+          className="mb-6 lg:w-1/2 mx-auto rounded-md px-5 block text-right"
         >
           ...もっと見る
         </Link>
+        <Tag tags={allTags} />
       </main>
     </div>
   );

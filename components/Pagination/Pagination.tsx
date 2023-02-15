@@ -14,7 +14,7 @@ export interface Props {
 }
 
 const Pagination = (props: Props) => {
-  const { currentPage, numberOfPage, tag = "" } = props;
+  const { currentPage, numberOfPage, tag } = props;
 
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === numberOfPage;

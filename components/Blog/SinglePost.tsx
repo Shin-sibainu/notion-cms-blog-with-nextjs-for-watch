@@ -6,11 +6,12 @@ type Props = {
   title: string;
   date: string;
   description: string;
+  tag: string;
   isPageList: boolean;
 };
 
 const SinglePost = (props: Props) => {
-  const { slug, title, date, description, isPageList } = props;
+  const { slug, title, date, description, tag, isPageList } = props;
   // console.log({ slug, title, date, description });
 
   return (
@@ -21,17 +22,23 @@ const SinglePost = (props: Props) => {
             <h2 className="text-gray-100 font-medium text-2xl mb-2 mr-2">
               {title}
             </h2>
-            <div className="text-gray-400">{date}</div>
+            <span className="text-gray-400 mr-2">{date}</span>
+            <Link href={`/posts/tag/${tag}`}>
+              <div className="cursor-pointer px-2 font-medium pb-1 text-sm text-white rounded-xl bg-gray-500 inline-block">
+                {tag}
+              </div>
+            </Link>
           </div>
           <p className="text-gray-100 ">{description}</p>
         </section>
       ) : (
         <section className="mb-8 lg:w-1/2 mx-auto bg-sky-900 rounded-md p-5 shadow-2xl hover:shadow-none hover:translate-y-1 transition-all duration-300">
-          <div className="flex items-center">
-            <h2 className="text-gray-100 font-medium text-2xl mb-2 mr-2">
-              {title}
-            </h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-gray-100 font-medium text-2xl mb-2">{title}</h2>
             <div className="text-gray-400">{date}</div>
+            <div className="px-2 font-medium pb-1 text-white  rounded-xl bg-gray-500 inline-block">
+              {tag}
+            </div>
           </div>
           <p className="text-gray-100 ">{description}</p>
         </section>
