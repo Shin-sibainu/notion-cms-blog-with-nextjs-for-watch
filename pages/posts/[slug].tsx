@@ -8,7 +8,7 @@ import Link from "next/link";
 export const getStaticPaths = async () => {
   const posts = await getAllPosts();
   const paths = posts.map(({ slug }) => ({ params: { slug } }));
-  console.log(paths);
+  // console.log(paths);
 
   return {
     paths,
@@ -44,9 +44,11 @@ const Post = ({ post }) => {
       <div className="border-b-2 w-1/3 mt-1 border-sky-900"></div>
       <span className="text-dark-300">Posted date at {post.metadata.date}</span>
       <br />
-      <p className="px-2 font-medium pb-1 mt-2 text-gray-400 rounded-xl bg-sky-900 inline-block">
-        {post.metadata.tags}
-      </p>
+      <Link href={`/posts/tag/${post.metadata.tags}`}>
+        <p className="text-white px-2 font-medium pb-1 mt-2 rounded-xl bg-sky-900 inline-block">
+          {post.metadata.tags}
+        </p>
+      </Link>
       <ReactMarkdown
         className="mt-10 text-dark-100 font-medium"
         components={{

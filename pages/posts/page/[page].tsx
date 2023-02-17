@@ -6,6 +6,7 @@ import Pagination from "../../../components/Pagination/Pagination";
 import Tag from "../../../components/Tag/Tag";
 import {
   getAllPosts,
+  getAllTags,
   getNumberOfPages,
   getPostsByPage,
 } from "../../../lib/notion";
@@ -18,10 +19,7 @@ export const getStaticPaths = async () => {
     params.push({ params: { page: i.toString() } });
   }
 
-  // console.log(params);
-
   return {
-    // paths: [`/posts/page/1`], // /posts/page/1
     paths: params,
     fallback: "blocking",
   };
@@ -32,18 +30,20 @@ export const getStaticProps = async (context) => {
   const currentPage = context.params?.page;
   const data = await getPostsByPage(parseInt(currentPage.toString(), 10)); //page ... 今見てるページ番号
   const numberOfPages = await getNumberOfPages();
+  const allTags = await getAllTags();
 
   return {
     props: {
       posts: data,
       currentPage: currentPage,
       numberOfPages: numberOfPages,
+      allTags,
     },
     revalidate: 60, //60s毎にISR発動
   };
 };
 
-const BlogPageList = ({ posts, currentPage, numberOfPages }) => {
+const BlogPageList = ({ posts, currentPage, numberOfPages, allTags }) => {
   return (
     <div className="container h-full w-full mx-auto font-Zen">
       <Head>
@@ -76,6 +76,7 @@ const BlogPageList = ({ posts, currentPage, numberOfPages }) => {
           numberOfPage={numberOfPages}
           tag=""
         />
+        <Tag tags={allTags} />
       </main>
     </div>
   );

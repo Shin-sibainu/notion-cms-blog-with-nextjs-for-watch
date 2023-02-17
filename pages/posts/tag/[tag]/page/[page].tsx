@@ -1,44 +1,68 @@
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
-import SinglePost from "../../../../components/Blog/SinglePost";
-import Pagination from "../../../../components/Pagination/Pagination";
-import Tag from "../../../../components/Tag/Tag";
+import SinglePost from "../../../../../components/Blog/SinglePost";
+import Pagination from "../../../../../components/Pagination/Pagination";
+import Tag from "../../../../../components/Tag/Tag";
 import {
   getAllPosts,
+  getAllTags,
   getNumberOfPages,
+  getNumberOfPagesByTag,
   getPostsByPage,
-} from "../../../../lib/notion";
+  getPostsByTagAndPage,
+} from "../../../../../lib/notion";
 
-export const getStaticPaths = async () => {
-  const posts = await getAllPosts();
-  //   const paths = posts.map(({ slug }) => ({ params: { slug } }));
-  //   console.log(paths);
+export const getStaticPaths = async (context) => {
+  //https://github.com/otoyo/astro-notion-blog/blob/main/src/pages/blog/tag/%5Btag%5D/page/%5Bpage%5D.astro
+  const allTags = await getAllTags();
+
+  let params = [];
+
+  await Promise.all(
+    allTags.map((tag) => {
+      return getNumberOfPagesByTag(tag).then((numberOfPages: number) => {
+        for (let i = 1; i <= numberOfPages; i++) {
+          params.push({ params: { tag: tag, page: i.toString() } });
+        }
+      });
+    })
+  );
+
+  /* TODO:正常なパスに修正 */
+  // console.log(params);
 
   return {
-    // paths: [`/posts/page/1`], // /posts/page/1
-    paths: [{ params: { page: "1" } }],
+    paths: params,
     fallback: "blocking",
   };
 };
 
 export const getStaticProps = async (context) => {
   //何ページ目の記事を持ってくるのか
-  const currentPage = context.params?.page;
-  const data = await getPostsByPage(parseInt(currentPage.toString(), 10)); //page ... 今見てるページ番号
-  const numberOfPages = await getNumberOfPages();
+  const currentPage = context.params?.page.toString();
+  const currentTag = context.params?.tag.toString();
+  // console.log(currentTag);
+
+  /* Tag用ページ取得に変更 */
+  const data = await getPostsByTagAndPage(
+    currentTag,
+    parseInt(currentPage, 10)
+  ); //page ... 今見てるページ番号
+  const numberOfPages = await getNumberOfPagesByTag(currentTag);
 
   return {
     props: {
       posts: data,
       currentPage: currentPage,
+      curretTag: currentTag,
       numberOfPages: numberOfPages,
     },
     revalidate: 60, //60s毎にISR発動
   };
 };
 
-const BlogTagPageList = ({ posts, currentPage, numberOfPages }) => {
+const BlogTagPageList = ({ posts, currentPage, numberOfPages, currentTag }) => {
   return (
     <div className="container h-full w-full mx-auto font-Zen">
       <Head>
@@ -69,7 +93,7 @@ const BlogTagPageList = ({ posts, currentPage, numberOfPages }) => {
         <Pagination
           currentPage={parseInt(currentPage, 10)}
           numberOfPage={numberOfPages}
-          tag="blog"
+          tag={currentTag}
         />
       </main>
     </div>

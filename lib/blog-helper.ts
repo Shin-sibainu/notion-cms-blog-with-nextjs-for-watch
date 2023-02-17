@@ -1,5 +1,5 @@
 export const getTagLink = (tag: string) => {
-  return `/blog/tag/${encodeURIComponent(tag)}`;
+  return `/posts/tag/${encodeURIComponent(tag)}`;
 };
 
 export const getPageLink = (page: number, tag: string) => {

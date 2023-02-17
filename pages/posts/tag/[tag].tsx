@@ -27,21 +27,23 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (context) => {
   //何ページ目の記事を持ってくるのか
-  const tag = context.params?.tag;
+  const currentTag = context.params?.tag;
+
   const tagPosts = await getPostsByTag(
-    tag.toString(),
+    currentTag.toString(),
     NUMBER_OF_POSTS_PER_PAGE
   );
 
   return {
     props: {
+      currentTag: currentTag.toString(),
       posts: tagPosts,
     },
     revalidate: 60, //60s毎にISR発動
   };
 };
 
-const BlogTagList = ({ posts, currentPage, numberOfPages }) => {
+const BlogTagList = ({ posts, currentPage, numberOfPages, currentTag }) => {
   return (
     <div className="container h-full w-full mx-auto font-Zen">
       <Head>
@@ -51,9 +53,14 @@ const BlogTagList = ({ posts, currentPage, numberOfPages }) => {
       </Head>
 
       <main className="contianer w-full mt-16">
-        <h1 className="text-5xl text-dark-100 mb-16 text-center font-medium">
+        <h1 className="text-5xl text-dark-100 mb-8 text-center font-medium">
           Notion Blog🚀
         </h1>
+        <div className="text-center">
+          <h3 className="text-white bg-gray-500 px-3 pb-1 rounded-lg inline-block text-2xl text-dark-100 mb-8 text-center font-medium">
+            {currentTag}
+          </h3>
+        </div>
         {/* page番号に応じて内容を変える */}
         <section className="sm:grid grid-cols-2 gap-3 w-5/6 mx-auto">
           {/* /tag/○○の記事だけを取得 */}
@@ -73,7 +80,7 @@ const BlogTagList = ({ posts, currentPage, numberOfPages }) => {
         <Pagination
           currentPage={1}
           numberOfPage={numberOfPages}
-          tag="blog" //ここを動的に変更
+          tag={currentTag.toString()} //ここを動的に変更
         />
       </main>
     </div>

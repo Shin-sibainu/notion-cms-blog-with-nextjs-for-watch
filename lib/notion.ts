@@ -149,7 +149,7 @@ export const getPostsByTag = async (tagName: string, pageSize = 4) => {
     .slice(0, pageSize);
 };
 
-export async function getAllTags() {
+export const getAllTags = async () => {
   const allPosts = await getAllPosts();
 
   const allTagsDuplicationLists = allPosts.flatMap((post) => post.tags);
@@ -157,4 +157,35 @@ export async function getAllTags() {
   const allTagsList = Array.from(set);
 
   return allTagsList;
-}
+};
+
+export const getPostsByTagAndPage = async (tagName: string, page: number) => {
+  if (page < 1) {
+    return [];
+  }
+
+  const allPosts = await getAllPosts();
+  const posts = allPosts.filter((post) =>
+    post.tags.find((tag) => tag === tagName)
+  );
+
+  const startIndex = (page - 1) * NUMBER_OF_POSTS_PER_PAGE;
+  const endIndex = startIndex + NUMBER_OF_POSTS_PER_PAGE;
+
+  return posts.slice(startIndex, endIndex);
+};
+
+//タグ記事リスト専用ページ番号取得
+export const getNumberOfPagesByTag = async (tagName: string) => {
+  const allPosts = await getAllPosts();
+  const posts = allPosts.filter((post) =>
+    post.tags.find((tag) => tag === tagName)
+  );
+  // console.log(tagName); //blog, programming
+  // console.log(posts.length); // blog...7, programming...6
+  return Math.floor(posts.length / NUMBER_OF_POSTS_PER_PAGE) +
+    (posts.length % NUMBER_OF_POSTS_PER_PAGE) >
+    0
+    ? 1
+    : 0;
+};

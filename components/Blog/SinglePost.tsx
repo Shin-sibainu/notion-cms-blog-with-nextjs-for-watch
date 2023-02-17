@@ -23,11 +23,9 @@ const SinglePost = (props: Props) => {
               {title}
             </h2>
             <span className="text-gray-400 mr-2">{date}</span>
-            <Link href={`/posts/tag/${tag}`}>
-              <div className="cursor-pointer px-2 font-medium pb-1 text-sm text-white rounded-xl bg-gray-500 inline-block">
-                {tag}
-              </div>
-            </Link>
+            <span className="cursor-pointer px-2 font-medium pb-1 text-sm text-white rounded-xl bg-gray-500 inline-block">
+              {tag}
+            </span>
           </div>
           <p className="text-gray-100 ">{description}</p>
         </section>
@@ -36,9 +34,9 @@ const SinglePost = (props: Props) => {
           <div className="flex items-center gap-3">
             <h2 className="text-gray-100 font-medium text-2xl mb-2">{title}</h2>
             <div className="text-gray-400">{date}</div>
-            <div className="px-2 font-medium pb-1 text-white  rounded-xl bg-gray-500 inline-block">
+            <span className="px-2 font-medium pb-1 text-white  rounded-xl bg-gray-500 inline-block">
               {tag}
-            </div>
+            </span>
           </div>
           <p className="text-gray-100 ">{description}</p>
         </section>

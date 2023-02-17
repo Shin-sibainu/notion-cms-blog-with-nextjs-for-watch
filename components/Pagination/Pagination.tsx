@@ -23,6 +23,7 @@ const Pagination = (props: Props) => {
   const endPage =
     currentPage + 2 > numberOfPage ? numberOfPage : currentPage + 2;
 
+  /* TODO:タグ検索のとき1,2,3まででてきてしまう。3はいらない。 */
   let pages = [];
 
   for (let i = startPage; i <= endPage; i++) {
