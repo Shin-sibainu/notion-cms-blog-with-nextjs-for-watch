@@ -49,6 +49,7 @@ export const getStaticProps = async (context) => {
     currentTag,
     parseInt(currentPage, 10)
   ); //page ... 今見てるページ番号
+  //これの値の取得がおかしかも..?
   const numberOfPages = await getNumberOfPagesByTag(currentTag);
 
   return {
@@ -58,7 +59,7 @@ export const getStaticProps = async (context) => {
       curretTag: currentTag,
       numberOfPages: numberOfPages,
     },
-    revalidate: 60, //60s毎にISR発動
+    revalidate: 10, //60s毎にISR発動
   };
 };
 

@@ -100,6 +100,7 @@ export const getSinglePost = async (slug) => {
   });
 
   const page = response.results[0];
+  // console.log(page);
   const metadata = getPageMetaData(page);
   const mdBlocks = await n2m.pageToMarkdown(page.id);
   const mdString = n2m.toMarkdownString(mdBlocks);
@@ -179,7 +180,7 @@ export const getPostsByTagAndPage = async (tagName: string, page: number) => {
 export const getNumberOfPagesByTag = async (tagName: string) => {
   const allPosts = await getAllPosts();
   const posts = allPosts.filter((post) =>
-    post.tags.find((tag) => tag === tagName)
+    post.tags.find((tag: string) => tag === tagName)
   );
   // console.log(tagName); //blog, programming
   // console.log(posts.length); // blog...7, programming...6

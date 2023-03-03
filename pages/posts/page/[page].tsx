@@ -39,7 +39,7 @@ export const getStaticProps = async (context) => {
       numberOfPages: numberOfPages,
       allTags,
     },
-    revalidate: 60, //60s毎にISR発動
+    revalidate: 10, //60s毎にISR発動
   };
 };
 
