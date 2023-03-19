@@ -1,16 +1,12 @@
-export interface Post {
-  PageId: string;
-  Title: string;
-  Slug: string;
-  Date: string;
-  Tags: SelectProperty[];
-  Excerpt: string;
-  FeaturedImage: string | null;
-  Rank: number;
+import { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+
+export interface PostMetaData {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  slug: string;
+  tags: string[];
 }
 
-export interface SelectProperty {
-  id: string;
-  name: string;
-  color: string;
-}
+export type NotionPage = DatabaseObjectResponse;

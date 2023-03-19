@@ -1,18 +1,24 @@
 import { Client } from "@notionhq/client";
-import { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
+import {
+  DatabaseObjectResponse,
+  PageObjectResponse,
+  PartialPageObjectResponse,
+  QueryDatabaseResponse,
+} from "@notionhq/client/build/src/api-endpoints";
 import { NotionToMarkdown } from "notion-to-md";
 import { NUMBER_OF_POSTS_PER_PAGE } from "../src/server_constants";
+import { NotionPage, PostMetaData } from "./interfaces";
 
-const notion = new Client({
+const notion: Client = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-const n2m = new NotionToMarkdown({ notionClient: notion });
+const n2m: NotionToMarkdown = new NotionToMarkdown({ notionClient: notion });
 
 export const getAllPosts = async () => {
+  //https://ymtdzzz.dev/post/use-notion-as-cms/
   const posts: QueryDatabaseResponse = await notion.databases.query({
     database_id: process.env.DATABASE_ID,
-    //https://ymtdzzz.dev/post/use-notion-as-cms/
     page_size: 100,
     filter: {
       property: "Published",
@@ -28,15 +34,20 @@ export const getAllPosts = async () => {
     ],
   });
 
-  const allPosts = posts.results;
+  const allPosts: (PageObjectResponse | PartialPageObjectResponse)[] =
+    posts.results;
 
-  return allPosts.map((post) => {
-    return getPageMetaData(post);
-  });
+  return allPosts.map(
+    (post: PageObjectResponse | PartialPageObjectResponse) => {
+      return getPageMetaData(post);
+    }
+  );
 };
 
-const getPageMetaData = (post) => {
-  const getTags = (tags) => {
+const getPageMetaData = (
+  post: PageObjectResponse | PartialPageObjectResponse
+) => {
+  const getTags = (tags: { name: string }[]): string[] => {
     const allTags = tags.map((tag) => {
       return tag.name;
     });
@@ -86,7 +97,7 @@ const getToday = (datestring: string) => {
 };
 
 /* singlePost */
-export const getSinglePost = async (slug) => {
+export const getSinglePost = async (slug: string) => {
   const response = await notion.databases.query({
     database_id: process.env.DATABASE_ID,
     filter: {
@@ -111,7 +122,7 @@ export const getSinglePost = async (slug) => {
   };
 };
 /* home用記事取得(4つ) */
-export const getPosts = async (pageSize = 4) => {
+export const getPosts = async (pageSize: number = 4) => {
   const allPosts = await getAllPosts();
   return allPosts.slice(0, pageSize);
 };
@@ -131,7 +142,7 @@ export const getPostsByPage = async (page: number) => {
 };
 //ページネーション箇所のページ数取得
 export const getNumberOfPages = async () => {
-  const allPosts = await getAllPosts();
+  const allPosts: PostMetaData[] = await getAllPosts();
   return (
     Math.floor(allPosts.length / NUMBER_OF_POSTS_PER_PAGE) +
     (allPosts.length % NUMBER_OF_POSTS_PER_PAGE > 0 ? 1 : 0)
